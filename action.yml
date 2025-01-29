@@ -1,0 +1,64 @@
+name: "Nostr Notifications"
+description: "Detects an evente in repository and send a nostr note with notification."
+author: "Anurag Lint"
+branding:
+  icon: "bell"
+  color: "purple"
+
+inputs:
+    nostr_relays:
+    description: "Comma-separated list of Nostr relay URLs."
+    required: true
+  nostr_private_key:
+    description: "Your private key for Nostr."
+    required: true
+
+outputs:
+  status:
+    description: "Status of the notification."
+
+runs:
+  using: "composite"
+  steps:
+    - name: Check event
+        id: check_event
+        shell: bash
+        run: |
+          if [ "${{ github.event_name }}" == "pull_request" ] && [ "${{ github.event.pull_request.state }}" == "closed" ]; then
+            if [ "${{ github.event.pull_request.merged }}" == "true" ]; then
+              echo "This PR was merged."
+              echo "send_notification=true" >> $GITHUB_OUTPUT
+            else
+              echo "This PR was not merged."
+              echo "send_notification=false" >> $GITHUB_OUTPUT
+            fi  
+          else
+            echo "Unknown event. Can only be run on a pull request merge"
+            echo "send_notification=false" >> $GITHUB_OUTPUT
+          fi
+
+    - name: Setup Python
+      if: steps.check_event.outputs.send_notification == 'true'
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.x'
+
+    - name: Install dependencies
+      if: steps.check_event.outputs.send_notification == 'true'
+      shell: bash
+      run: |
+        python -m pip install --upgrade pip
+        pip install nostr
+
+    - name: Run notify script
+      if: steps.check_event.outputs.send_notification == 'true'
+      env:
+        NOSTR_RELAYS: ${{ inputs.nostr_relays }}
+        NOSTR_PRIVATE_KEY: ${{ inputs.nostr_private_key }}
+      shell: bash
+      run: |
+        python src/notify_nostr.py \
+          --repo "${{ github.repository }}" \
+          --user "${{ github.event.pull_request.user.login }}" \
+          --title "${{ github.event.pull_request.title }}" \
+          --url "${{ github.event.pull_request.html_url }}"
