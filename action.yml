@@ -6,7 +6,7 @@ branding:
   color: "purple"
 
 inputs:
-    nostr_relays:
+  nostr_relays:
     description: "Comma-separated list of Nostr relay URLs."
     required: true
   nostr_private_key:
