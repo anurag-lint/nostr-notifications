@@ -21,21 +21,21 @@ runs:
   using: "composite"
   steps:
     - name: Check event
-        id: check_event
-        shell: bash
-        run: |
-          if [ "${{ github.event_name }}" == "pull_request" ] && [ "${{ github.event.pull_request.state }}" == "closed" ]; then
-            if [ "${{ github.event.pull_request.merged }}" == "true" ]; then
-              echo "This PR was merged."
-              echo "send_notification=true" >> $GITHUB_OUTPUT
-            else
-              echo "This PR was not merged."
-              echo "send_notification=false" >> $GITHUB_OUTPUT
-            fi  
+      id: check_event
+      shell: bash
+      run: |
+        if [ "${{ github.event_name }}" == "pull_request" ] && [ "${{ github.event.pull_request.state }}" == "closed" ]; then
+          if [ "${{ github.event.pull_request.merged }}" == "true" ]; then
+            echo "This PR was merged."
+            echo "send_notification=true" >> $GITHUB_OUTPUT
           else
-            echo "Unknown event. Can only be run on a pull request merge"
+            echo "This PR was not merged."
             echo "send_notification=false" >> $GITHUB_OUTPUT
-          fi
+          fi  
+        else
+          echo "Unknown event. Can only be run on a pull request merge"
+          echo "send_notification=false" >> $GITHUB_OUTPUT
+        fi
 
     - name: Setup Python
       if: steps.check_event.outputs.send_notification == 'true'
