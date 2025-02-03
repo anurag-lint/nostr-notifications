@@ -57,7 +57,7 @@ runs:
         NOSTR_PRIVATE_KEY: ${{ inputs.nostr_private_key }}
       shell: bash
       run: |
-        python src/notify_nostr.py \
+        python ${{ github.action_path }}/src/notify_nostr.py \
           --repo "${{ github.repository }}" \
           --user "${{ github.event.pull_request.user.login }}" \
           --title "${{ github.event.pull_request.title }}" \
