@@ -88,20 +88,20 @@ def send_nostr_note(private_key_hex, repo_name, user, gh_pubkey, title, url, rel
     try:
         # Sende event
         relay_manager.publish_event(event)
-        print(f"Nota enviada exitosamente a {relays}")
+        print(f"Note successfully sent to {relays}")
     except Exception as e:
-        print(f"Error al enviar la nota a {relay_url}: {e}")
+        print(f"Error sending note to {relay_url}: {e}")
     finally:
         time.sleep(1) 
         relay_manager.close_connections()
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Enviar una nota a Nostr al realizar merge de un PR.")
-    parser.add_argument("--repo", required=True, help="Repositorio donde se creeo la PR")
-    parser.add_argument("--user", required=True, help="Usuario que creó el PR.")
-    parser.add_argument("--title", required=True, help="Título del PR.")
-    parser.add_argument("--url", required=True, help="URL del PR.")
+    parser = argparse.ArgumentParser(description="Send a note to Nostr when merging a PR.")
+    parser.add_argument("--repo", required=True, help="Repository where the PR is created")
+    parser.add_argument("--user", required=True, help="User who created the PR.")
+    parser.add_argument("--title", required=True, help="Title of the PR.")
+    parser.add_argument("--url", required=True, help="PR URL.")
 
     args = parser.parse_args()
 
