@@ -74,10 +74,11 @@ def send_nostr_note(private_key_hex, repo_name, user, gh_pubkey, title, url, rel
     private_key.sign_event(event)
     
     json_obj = json.dumps(event.__dict__, indent=4)
+    print(f"Note to send:")
     print(json_obj)
 
     for relay_url in relays:
-        print(f"Enviando nota al relay: {relay_url}")
+        print(f"Sending note to relay: {relay_url}")
         relay_manager = RelayManager()
         relay_manager.add_relay(relay_url)
 
