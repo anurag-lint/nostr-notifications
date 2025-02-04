@@ -10,7 +10,7 @@ inputs:
     description: "Comma-separated list of Nostr relay URLs."
     required: true
   nostr_private_key:
-    description: "Your private key for Nostr."
+    description: "Your private key for Nostr. It is important that this input be set as an Action Secret to keep the private key secret."
     required: true
 
 runs:
