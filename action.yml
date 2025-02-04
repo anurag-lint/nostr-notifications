@@ -39,13 +39,6 @@ runs:
       with:
         python-version: '3.x'
 
-    - name: Install windows dependencies
-      if: ${{ runner.os == 'Windows' && steps.check_event.outputs.send_notification == 'true' }}
-      shell: cmd
-      run: |
-        choco install pkgconfiglite -y
-        choco install make -y
-
     - name: Install python dependencies
       if: steps.check_event.outputs.send_notification == 'true'
       shell: bash
