@@ -13,10 +13,6 @@ inputs:
     description: "Your private key for Nostr."
     required: true
 
-outputs:
-  status:
-    description: "Status of the notification."
-
 runs:
   using: "composite"
   steps:
