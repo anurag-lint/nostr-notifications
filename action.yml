@@ -45,7 +45,6 @@ runs:
       run: |
         choco install pkgconfiglite -y
         choco install make -y
-        choco install autoconf -y
 
     - name: Install python dependencies
       if: steps.check_event.outputs.send_notification == 'true'
